@@ -65,61 +65,89 @@
   
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   body {
     @apply bg-background text-foreground antialiased;
     font-family: "Inter", sans-serif;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Improved focus states for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-[#083865]/50 ring-offset-2;
+  }
+
+  /* Better selection colors */
+  ::selection {
+    background-color: rgba(8, 56, 101, 0.15);
+    color: #083865;
   }
 }
 
-/* Custom scrollbar */
+/* Premium custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #f8f9fa;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #083865;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #083865 0%, #1361A9 100%);
+  border-radius: 6px;
+  border: 2px solid #f8f9fa;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1361A9;
+  background: linear-gradient(180deg, #1361A9 0%, #083865 100%);
 }
 
 /* Custom utilities */
 @layer utilities {
+  /* Premium glassmorphism effects */
   .glass-effect {
-    @apply backdrop-blur-md bg-white/60 border border-[#CECECE];
+    @apply backdrop-blur-xl border border-white/20;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 100%);
+    box-shadow: 
+      0 8px 32px -8px rgba(8, 56, 101, 0.1),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5);
   }
   
   .glass-dark {
-    @apply backdrop-blur-[20px];
-    background: rgba(64, 37, 16, 0.51);
+    @apply backdrop-blur-2xl border border-white/10;
+    background: linear-gradient(135deg, rgba(64, 37, 16, 0.6) 0%, rgba(40, 25, 12, 0.7) 100%);
+    box-shadow: 
+      0 16px 48px -12px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
   
   .glass-button {
-    @apply backdrop-blur-[10px];
-    background: rgba(217, 217, 217, 0.22);
+    @apply backdrop-blur-md;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
   }
   
+  /* Responsive section padding - 8pt grid */
   .section-padding {
-    @apply px-5 sm:px-8 lg:px-16 xl:px-[133px];
+    @apply px-5 sm:px-8 lg:px-16 xl:px-[120px];
   }
   
+  /* Premium heading style */
   .heading-cambay {
     font-family: "Cambay", sans-serif;
-    @apply font-bold uppercase;
+    @apply font-bold uppercase tracking-wide;
+    letter-spacing: 0.025em;
   }
   
+  /* Improved container */
   .container-custom {
-    @apply max-w-[1920px] mx-auto w-full;
+    @apply max-w-[1800px] mx-auto w-full;
   }
   
+  /* Brand colors as utilities */
   .text-brand-navy {
     color: #083865;
   }
@@ -143,9 +171,41 @@
   .bg-brand-blue {
     background-color: #1361A9;
   }
+
+  /* Premium gradient text */
+  .text-gradient-premium {
+    background: linear-gradient(135deg, #083865 0%, #1361A9 50%, #083865 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Premium card shadow */
+  .shadow-premium {
+    box-shadow: 
+      0 4px 6px -1px rgba(8, 56, 101, 0.05),
+      0 10px 20px -2px rgba(8, 56, 101, 0.08),
+      0 20px 40px -4px rgba(8, 56, 101, 0.06);
+  }
+
+  .shadow-premium-hover {
+    box-shadow: 
+      0 8px 12px -2px rgba(8, 56, 101, 0.08),
+      0 20px 40px -4px rgba(8, 56, 101, 0.12),
+      0 40px 60px -8px rgba(8, 56, 101, 0.08);
+  }
+
+  /* Smooth hover lift */
+  .hover-lift {
+    @apply transition-all duration-500;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
 }
 
-/* Animation keyframes */
+/* Animation keyframes - Premium micro-interactions */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -199,8 +259,36 @@
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Animation utilities */
 .animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-fade-in {
@@ -208,20 +296,55 @@
 }
 
 .animate-slide-in-left {
-  animation: slideInLeft 0.8s ease-out forwards;
+  animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-slide-in-right {
-  animation: slideInRight 0.8s ease-out forwards;
+  animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-scale-in {
-  animation: scaleIn 0.6s ease-out forwards;
+  animation: scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Stagger delays for animations */
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-.stagger-5 { animation-delay: 0.5s; }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Stagger delays for animations - 8pt grid timing */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.3s; }
+.stagger-7 { animation-delay: 0.35s; }
+.stagger-8 { animation-delay: 0.4s; }
+
+/* Screen reader only - accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible enhancement for accessibility */
+.focus-ring {
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-[#083865]/50 focus-visible:ring-offset-2;
+}
