@@ -102,19 +102,11 @@ export default function CartPage() {
   const { cartItems, cartCount, removeFromCart, updateQuantity, clearCart, isHydrated } = useCart();
 
   const heroRef = useRef(null);
-  const contentRef = useRef(null);
 
   useEffect(() => {
     if (isHydrated && heroRef.current) {
       gsap.set(heroRef.current, { opacity: 0, y: 20 });
       gsap.to(heroRef.current, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", delay: 0.1 });
-    }
-  }, [isHydrated]);
-
-  useEffect(() => {
-    if (isHydrated && contentRef.current && cartItems.length > 0) {
-      const els = contentRef.current.querySelectorAll(".cart-row");
-      gsap.from(els, { opacity: 0, x: -20, duration: 0.4, stagger: 0.06, ease: "power3.out" });
     }
   }, [isHydrated]);
 
@@ -130,7 +122,7 @@ export default function CartPage() {
 
       <main>
         {/* ── Sub-page Header ── */}
-        <div className="bg-gradient-to-br from-[#051e36] to-[#083865] pt-24 sm:pt-28 pb-10 sm:pb-12">
+        <div className="bg-gradient-to-br from-[#051e36] to-[#083865] pt-24 sm:pt-34 pb-10 sm:pb-8">
           <div className="container-custom section-padding" ref={heroRef}>
             <div className="flex items-center gap-3 mb-3">
               <ShoppingBag01Icon className="w-6 h-6 text-white/60" aria-hidden="true" />
@@ -207,9 +199,9 @@ export default function CartPage() {
                     </button>
                   </div>
 
-                  <div ref={contentRef} className="bg-white rounded-2xl border border-[#e5e7eb] px-5 sm:px-6 divide-y divide-[#e5e7eb]" role="list" aria-label="Cart items">
+                  <div className="bg-white rounded-2xl border border-[#e5e7eb] px-5 sm:px-6 divide-y divide-[#e5e7eb]" role="list" aria-label="Cart items">
                     {cartItems.map((item) => (
-                      <div key={item.id} className="cart-row" role="listitem">
+                      <div key={item.id} role="listitem">
                         <CartItem
                           item={item}
                           onUpdateQty={updateQuantity}
