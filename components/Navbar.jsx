@@ -3,22 +3,21 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { Menu01Icon, Cancel01Icon } from "hugeicons-react";
 
 const navLinks = [
-  { name: "Home", href: "#", active: true },
-  { name: "About us", href: "#about" },
-  { name: "Products", href: "#products" },
-  { name: "Quality Assurance", href: "#qualities" },
-  { name: "News", href: "#stories" },
-  { name: "Contact us", href: "#footer" },
+  { name: "Home", href: "/" },
+  { name: "About us", href: "/about" },
+  { name: "Products", href: "/products" },
+  { name: "Contact us", href: "/contact" },
 ];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("Home");
+  const pathname = usePathname();
   const navRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const backdropRef = useRef(null);
@@ -119,35 +118,38 @@ export default function Navbar() {
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center gap-6 xl:gap-10">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`relative text-sm xl:text-base leading-[1.21] font-medium transition-all duration-300 hover:text-[#083865] focus:outline-none focus:text-[#083865] group ${
-                  link.active ? "text-[#083865]" : "text-[#111827]/80"
-                }`}
-              >
-                {link.name}
-                {/* Underline indicator */}
-                <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#083865] to-[#1361A9] transition-all duration-300 rounded-full ${
-                  link.active ? "w-full" : "w-0 group-hover:w-full"
-                }`} />
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("#")[0]) && link.href.split("#")[0].length > 1);
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`relative text-sm xl:text-base leading-[1.21] font-medium transition-all duration-300 hover:text-[#083865] focus:outline-none focus:text-[#083865] group ${
+                    isActive ? "text-[#083865]" : "text-[#111827]/80"
+                  }`}
+                >
+                  {link.name}
+                  {/* Underline indicator */}
+                  <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#083865] to-[#1361A9] transition-all duration-300 rounded-full ${
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  }`} />
+                </Link>
+              );
+            })}
           </div>
 
           {/* CTA Button - Desktop */}
-          <a
-            href="#footer"
+          <Link
+            href="/contact"
             className="hidden lg:inline-flex items-center gap-2 px-6 py-2.5 bg-[#083865] text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2"
           >
             Get Quote
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
+          </Link>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile: Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="lg:hidden p-2.5 text-[#111827] hover:text-[#083865] hover:bg-[#083865]/5 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
@@ -200,31 +202,34 @@ export default function Navbar() {
             {/* Navigation Links */}
             <nav className="flex-1 overflow-y-auto py-6 px-6">
               <div className="flex flex-col gap-2">
-                {navLinks.map((link, index) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    onClick={closeMobileMenu}
-                    className={`flex items-center gap-3 text-lg font-medium py-3.5 px-4 rounded-xl transition-all duration-300 ${
-                      link.active 
-                        ? "text-[#083865] bg-[#083865]/5" 
-                        : "text-[#111827] hover:text-[#083865] hover:bg-[#083865]/5"
-                    }`}
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    {link.active && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#083865]" />
-                    )}
-                    {link.name}
-                  </Link>
-                ))}
+                {navLinks.map((link, index) => {
+                  const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("#")[0]) && link.href.split("#")[0].length > 1);
+                  return (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      onClick={closeMobileMenu}
+                      className={`flex items-center gap-3 text-lg font-medium py-3.5 px-4 rounded-xl transition-all duration-300 ${
+                        isActive
+                          ? "text-[#083865] bg-[#083865]/5"
+                          : "text-[#111827] hover:text-[#083865] hover:bg-[#083865]/5"
+                      }`}
+                      style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#083865]" />
+                      )}
+                      {link.name}
+                    </Link>
+                  );
+                })}
               </div>
             </nav>
 
             {/* Footer CTA */}
             <div className="p-6 border-t border-gray-100">
               <a
-                href="#footer"
+                href="/contact"
                 onClick={closeMobileMenu}
                 className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#083865] text-white text-base font-semibold rounded-xl transition-all duration-300 hover:bg-[#1361A9] focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
               >

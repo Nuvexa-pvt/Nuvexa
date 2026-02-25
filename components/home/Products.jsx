@@ -3,17 +3,14 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
 import ProductCard from "../ProductCard";
 import { ArrowRight01Icon } from "hugeicons-react";
+import { SAMPLE_PRODUCTS } from "@/lib/productsData";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const products = [
-  { id: 1, name: "CINNAMON", image: "/product image.png", rating: 5 },
-  { id: 2, name: "CINNAMON", image: "/product image.png", rating: 5 },
-  { id: 3, name: "CINNAMON", image: "/product image.png", rating: 5 },
-  { id: 4, name: "CINNAMON", image: "/product image.png", rating: 5 },
-];
+const products = SAMPLE_PRODUCTS.filter((p) => p.featured).slice(0, 4);
 
 export default function Products() {
   const sectionRef = useRef(null);
@@ -95,13 +92,13 @@ export default function Products() {
           </div>
           
           {/* View All Link - Desktop */}
-          <a
-            href="#"
+          <Link
+            href="/products"
             className="hidden sm:inline-flex items-center gap-2 text-[#083865] text-sm font-semibold uppercase tracking-wider hover:text-[#1361A9] transition-colors duration-300 group"
           >
             View All Products
             <ArrowRight01Icon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </a>
+          </Link>
         </div>
 
         {/* Products Grid */}
@@ -114,9 +111,12 @@ export default function Products() {
           {products.map((product) => (
             <div key={product.id} role="listitem">
               <ProductCard
+                id={product.id}
+                slug={product.slug}
                 name={product.name}
-                image={product.image}
+                image={product.mainImage}
                 rating={product.rating}
+                category={product.category}
               />
             </div>
           ))}
@@ -124,13 +124,13 @@ export default function Products() {
 
         {/* View All Button - Mobile */}
         <div ref={ctaRef} className="mt-10 text-center sm:hidden">
-          <a
-            href="#"
+          <Link
+            href="/products"
             className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-[#083865] text-white rounded-xl text-sm font-semibold uppercase tracking-wide transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#083865]/50 focus:ring-offset-2"
           >
             View All Products
             <ArrowRight01Icon className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

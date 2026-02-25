@@ -18,11 +18,11 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 const footerLinks = [
-  { name: "Customer Service", href: "#" },
-  { name: "Products", href: "#products" },
-  { name: "Sustainability", href: "#" },
-  { name: "Blog", href: "#stories" },
-  { name: "Contact Us", href: "#footer" },
+  { name: "About Us", href: "/about" },
+  { name: "Products", href: "/#products" },
+  { name: "Quality Assurance", href: "/#qualities" },
+  { name: "News", href: "/#stories" },
+  { name: "Contact Us", href: "/contact" },
 ];
 
 const socialLinks = [
@@ -155,23 +155,23 @@ export default function Footer() {
             </h3>
             <div className="flex flex-col items-center sm:items-start gap-3 sm:gap-4">
               <a 
-                href="mailto:info@nuvexa.com" 
+                href="mailto:peshala@sunwayhc.com" 
                 className="flex items-center gap-2 sm:gap-3 text-white/60 text-sm sm:text-base transition-colors duration-300 hover:text-white group focus:outline-none focus:text-white"
               >
                 <Mail01Icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 text-[#1361A9] group-hover:text-white transition-colors" />
-                <span>info@nuvexa.com</span>
+                <span>peshala@sunwayhc.com</span>
               </a>
               <a 
-                href="tel:+94112345678" 
+                href="tel:+94773666365" 
                 className="flex items-center gap-2 sm:gap-3 text-white/60 text-sm sm:text-base transition-colors duration-300 hover:text-white group focus:outline-none focus:text-white"
               >
                 <Call02Icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 text-[#1361A9] group-hover:text-white transition-colors" />
-                <span>+94 11 234 5678</span>
+                <span>(+94) 77 366 6365</span>
               </a>
               {/* Location - hidden on mobile */}
               <div className="hidden sm:flex items-start gap-3 text-white/50 text-sm sm:text-base">
                 <Location01Icon className="w-5 h-5 mt-0.5 flex-shrink-0 text-[#1361A9]" />
-                <span>Colombo, Sri Lanka</span>
+                <span>No. 33, 1 Lane, Ratmalana, Sri Lanka.</span>
               </div>
             </div>
           </div>

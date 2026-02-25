@@ -1,4 +1,7 @@
 import { Inter, Cambay } from "next/font/google";
+import { Toaster } from "sonner";
+import { CartProvider } from "@/lib/cartContext";
+import FloatingCart from "@/components/FloatingCart";
 import "./globals.css";
 
 const inter = Inter({
@@ -26,7 +29,11 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.variable} ${cambay.variable} antialiased bg-white`}
       >
-        {children}
+        <CartProvider>
+          {children}
+          <FloatingCart />
+        </CartProvider>
+        <Toaster position="bottom-right" richColors duration={3000} />
       </body>
     </html>
   );

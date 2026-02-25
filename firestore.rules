@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Deny read/write by default for security
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Public read access for product catalogue
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Allow public creates for inquiries (contact + product)
+    match /inquiries/{inquiryId} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
+  }
+}

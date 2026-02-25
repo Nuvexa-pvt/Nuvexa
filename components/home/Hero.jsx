@@ -125,7 +125,7 @@ export default function Hero() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#083865] to-[#1361A9] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </a>
           <a
-            href="#footer"
+            href="/contact"
             className="group relative px-8 sm:px-10 py-3.5 border-2 border-white/80 backdrop-blur-sm rounded-xl text-white text-base font-semibold transition-all duration-500 hover:bg-white/15 hover:border-white hover:shadow-[0_8px_32px_rgba(255,255,255,0.15)] hover:-translate-y-0.5 opacity-0 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
             aria-label="Send an inquiry"
           >
