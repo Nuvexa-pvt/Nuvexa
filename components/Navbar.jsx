@@ -142,7 +142,7 @@ export default function Navbar() {
         aria-label="Main navigation"
         className={`fixed left-0 right-0 mx-auto z-50 w-[calc(100%-32px)] sm:w-[calc(100%-48px)] lg:w-[calc(100%-200px)] max-w-[1600px] transition-all duration-500 ${
           isScrolled 
-            ? "top-4 shadow-[0_8px_32px_-8px_rgba(8,56,101,0.15)]" 
+            ? "top-2 sm:top-4 shadow-[0_8px_32px_-8px_rgba(8,56,101,0.15)]" 
             : "top-5 sm:top-7"
         }`}
       >

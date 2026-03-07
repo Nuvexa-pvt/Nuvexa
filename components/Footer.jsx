@@ -36,27 +36,27 @@ export default function Footer() {
   const footerRef = useRef(null);
   const contentRef = useRef(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        contentRef.current,
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: footerRef.current,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-    }, footerRef);
+  // useEffect(() => {
+  //   const ctx = gsap.context(() => {
+  //     gsap.fromTo(
+  //       contentRef.current,
+  //       { y: 60, opacity: 0 },
+  //       {
+  //         y: 0,
+  //         opacity: 1,
+  //         duration: 1,
+  //         ease: "power3.out",
+  //         scrollTrigger: {
+  //           trigger: footerRef.current,
+  //           start: "top 90%",
+  //           toggleActions: "play none none reverse",
+  //         },
+  //       }
+  //     );
+  //   }, footerRef);
 
-    return () => ctx.revert();
-  }, []);
+  //   return () => ctx.revert();
+  // }, []);
 
   return (
     <footer

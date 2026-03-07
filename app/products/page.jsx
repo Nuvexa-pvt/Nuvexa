@@ -204,7 +204,7 @@ export default function ProductsPage() {
         </section>
 
         {/* ── Filter & Search Bar ── */}
-        <div className="sticky top-[72px] z-30 bg-white/90 backdrop-blur-md border-b border-[#e5e7eb] shadow-sm">
+        <div className=" z-30 bg-white/90 backdrop-blur-md border-b border-[#e5e7eb] shadow-sm">
           <div className="container-custom section-padding py-4">
             <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
               {/* Search */}
