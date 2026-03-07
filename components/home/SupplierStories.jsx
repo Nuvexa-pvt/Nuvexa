@@ -125,7 +125,7 @@ export default function SupplierStories() {
             <button
               onClick={goToPrevious}
               disabled={isAnimating}
-              className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-xl border border-[#083865]/10 flex items-center justify-center text-[#737373] transition-all duration-300 hover:bg-[#083865] hover:text-white hover:border-transparent hover:shadow-lg hover:shadow-[#083865]/20 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
+              className="cursor-pointer w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-xl border border-[#083865]/10 flex items-center justify-center text-[#737373] transition-all duration-300 hover:bg-[#083865] hover:text-white hover:border-transparent hover:shadow-lg hover:shadow-[#083865]/20 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
               aria-label="Previous story"
             >
               <ArrowLeft01Icon className="w-5 h-5" />
@@ -133,7 +133,7 @@ export default function SupplierStories() {
             <button
               onClick={goToNext}
               disabled={isAnimating}
-              className="w-11 h-11 sm:w-12 sm:h-12 bg-[#083865] rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/25 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
+              className="cursor-pointer w-11 h-11 sm:w-12 sm:h-12 bg-[#083865] rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/25 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
               aria-label="Next story"
             >
               <ArrowRight01Icon className="w-5 h-5" />
@@ -180,7 +180,7 @@ export default function SupplierStories() {
                   setTimeout(() => setIsAnimating(false), 500);
                 }
               }}
-              className={`h-2.5 rounded-full transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 ${
+              className={`cursor-pointer h-2.5 rounded-full transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 ${
                 index === currentIndex 
                   ? "w-8 bg-gradient-to-r from-[#083865] to-[#1361A9]" 
                   : "w-2.5 bg-[#083865]/20 hover:bg-[#083865]/40"

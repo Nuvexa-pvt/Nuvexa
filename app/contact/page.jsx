@@ -313,7 +313,7 @@ export default function ContactPage() {
                     </p>
                     <button
                       onClick={() => setSubmitted(false)}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-[#083865] text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:bg-[#1361A9] focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 min-h-11"
+                      className="cursor-pointer inline-flex items-center gap-2 px-6 py-3 bg-[#083865] text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:bg-[#1361A9] focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 min-h-11"
                     >
                       Send Another Inquiry
                     </button>
@@ -357,7 +357,7 @@ export default function ContactPage() {
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full flex items-center justify-center gap-2.5 py-3.5 bg-[#083865] text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none min-h-11"
+                      className="cursor-pointer w-full flex items-center justify-center gap-2.5 py-3.5 bg-[#083865] text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none min-h-11"
                     >
                       {submitting ? (
                         <>

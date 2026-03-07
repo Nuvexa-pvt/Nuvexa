@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight01Icon } from "hugeicons-react";
@@ -15,6 +16,7 @@ const categories = [
     subtitle: "Premium Ceylon Tea",
     image: "/tea range pic.png",
     singleLine: true,
+    href: "/products?category=tea",
   },
   {
     id: 2,
@@ -22,6 +24,7 @@ const categories = [
     subtitle: "Authentic Sri Lankan Spices",
     image: "/spice range pic.png",
     singleLine: true,
+    href: "/products?category=spice",
   },
   {
     id: 3,
@@ -29,6 +32,7 @@ const categories = [
     subtitle: "Pure & Natural",
     image: "/coconut pic.png",
     singleLine: true,
+    href: "/products?category=coconut-products",
   },
   {
     id: 4,
@@ -36,6 +40,7 @@ const categories = [
     subtitle: "Wellness & Health",
     image: "/herb pic.png",
     singleLine: true,
+    href: "/products?category=herbal",
   },
 ];
 
@@ -115,10 +120,12 @@ export default function Categories() {
           role="list"
         >
           {categories.map((category) => (
-            <article
+            <Link
               key={category.id}
+              href={category.href}
               role="listitem"
-              className="group relative w-full aspect-[10/14] overflow-hidden rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-500"
+              className="group relative w-full aspect-[10/14] overflow-hidden rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-500 focus:outline-none focus:ring-2 focus:ring-[#083865]/40 focus:ring-offset-2"
+              aria-label={`View all ${category.name} products`}
             >
               {/* Background Image */}
               <Image
@@ -131,7 +138,7 @@ export default function Categories() {
 
               {/* Gradient Overlays */}
               <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/40 transition-opacity duration-500 group-hover:opacity-80" />
-              
+
               {/* Premium shimmer effect on hover */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-out" />
 
@@ -147,21 +154,18 @@ export default function Categories() {
                   </h3>
                 </div>
 
-                {/* Bottom: View All Button */}
+                {/* Bottom: View All indicator */}
                 <div className="transform transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-                  <button 
-                    className="w-full py-3 px-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/30 text-white text-sm font-semibold uppercase tracking-wide flex items-center justify-center gap-2 transition-all duration-300 hover:bg-white hover:text-[#083865] hover:border-transparent focus:outline-none focus:ring-2 focus:ring-white/50"
-                    aria-label={`View all ${category.name} products`}
-                  >
+                  <div className="w-full py-3 px-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/30 text-white text-sm font-semibold uppercase tracking-wide flex items-center justify-center gap-2 transition-all duration-300 group-hover:bg-white group-hover:text-[#083865] group-hover:border-transparent">
                     <span>View All</span>
                     <ArrowRight01Icon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </button>
+                  </div>
                 </div>
               </div>
 
               {/* Corner accent */}
               <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-white/30 rounded-tr-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            </article>
+            </Link>
           ))}
         </div>
       </div>

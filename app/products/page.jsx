@@ -7,20 +7,19 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { getAllProducts } from "@/lib/products";
-import { CATEGORY_LABELS } from "@/lib/productsData";
+import { CATEGORY_LABELS, CATEGORIES } from "@/lib/productsData";
 import { Search01Icon } from "hugeicons-react";
+import { db } from "@/lib/firebase";
+import { getDocs, collection } from "firebase/firestore";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const ITEMS_PER_PAGE = 12;
 
-const FILTER_CATEGORIES = [
-  { value: "all", label: "All Products" },
-  { value: "spice", label: "Spices" },
-  { value: "tea", label: "Teas" },
-  { value: "coconut-products", label: "Coconut Products" },
-  { value: "herbal", label: "Herbal" },
-];
+const ALL_PILL = { value: "all", label: "All Products" };
+
+// Module-level cache so we don't re-fetch on every mount
+let _filterCatsCache = null;
 
 function Pagination({ currentPage, totalPages, onPageChange }) {
   if (totalPages <= 1) return null;
@@ -46,7 +45,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2.5 rounded-xl border border-[#e5e7eb] text-[#737373] text-sm font-medium transition-all duration-300 hover:border-[#083865]/30 hover:text-[#083865] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#e5e7eb] disabled:hover:text-[#737373]"
+        className="cursor-pointer px-4 py-2.5 rounded-xl border border-[#e5e7eb] text-[#737373] text-sm font-medium transition-all duration-300 hover:border-[#083865]/30 hover:text-[#083865] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#e5e7eb] disabled:hover:text-[#737373]"
         aria-label="Previous page"
       >
         ← Prev
@@ -61,7 +60,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`w-10 h-10 rounded-xl text-sm font-semibold transition-all duration-300 ${
+            className={`cursor-pointer w-10 h-10 rounded-xl text-sm font-semibold transition-all duration-300 ${
               currentPage === page
                 ? "bg-[#083865] text-white shadow-md"
                 : "border border-[#e5e7eb] text-[#737373] hover:border-[#083865]/30 hover:text-[#083865]"
@@ -77,7 +76,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2.5 rounded-xl border border-[#e5e7eb] text-[#737373] text-sm font-medium transition-all duration-300 hover:border-[#083865]/30 hover:text-[#083865] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#e5e7eb] disabled:hover:text-[#737373]"
+        className="cursor-pointer px-4 py-2.5 rounded-xl border border-[#e5e7eb] text-[#737373] text-sm font-medium transition-all duration-300 hover:border-[#083865]/30 hover:text-[#083865] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#e5e7eb] disabled:hover:text-[#737373]"
         aria-label="Next page"
       >
         Next →
@@ -97,14 +96,34 @@ export default function ProductsPage() {
   const [category, setCategory] = useState("all");
   const [sortAsc, setSortAsc] = useState(true);
   const [page, setPage] = useState(1);
+  const [filterCategories, setFilterCategories] = useState(
+    () => [ALL_PILL, ...(_filterCatsCache ?? CATEGORIES.filter((c) => c.id !== "all").map((c) => ({ value: c.id, label: c.label })))]
+  );
+
+  // Fetch categories from DB (once per session)
+  useEffect(() => {
+    if (_filterCatsCache) {
+      setFilterCategories([ALL_PILL, ..._filterCatsCache]);
+      return;
+    }
+    getDocs(collection(db, "categories"))
+      .then((snap) => {
+        const items = snap.docs
+          .map((d) => ({ value: d.data().id, label: d.data().label }))
+          .filter((c) => c.value && c.label);
+        if (items.length > 0) {
+          _filterCatsCache = items;
+          setFilterCategories([ALL_PILL, ...items]);
+        }
+      })
+      .catch(() => { /* keep fallback */ });
+  }, []);
 
   // Fetch products + read initial category from URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const cat = params.get("category");
-    if (cat && FILTER_CATEGORIES.some((c) => c.value === cat)) {
-      setCategory(cat);
-    }
+    if (cat) setCategory(cat);
     getAllProducts()
       .then(setProducts)
       .finally(() => setLoading(false));
@@ -203,11 +222,11 @@ export default function ProductsPage() {
 
               {/* Category Pills — horizontal scroll on mobile */}
               <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide flex-shrink-0" role="group" aria-label="Filter by category">
-                {FILTER_CATEGORIES.map((cat) => (
+                {filterCategories.map((cat) => (
                   <button
                     key={cat.value}
                     onClick={() => setCategory(cat.value)}
-                    className={`whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition-all duration-300 ${
+                    className={`cursor-pointer whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-semibold uppercase tracking-wide transition-all duration-300 ${
                       category === cat.value
                         ? "bg-[#083865] text-white shadow-md shadow-[#083865]/20"
                         : "bg-[#f8fafc] border border-[#e5e7eb] text-[#737373] hover:border-[#083865]/30 hover:text-[#083865]"
@@ -222,7 +241,7 @@ export default function ProductsPage() {
               {/* Sort Toggle */}
               <button
                 onClick={() => setSortAsc((v) => !v)}
-                className="flex-shrink-0 flex items-center gap-2 px-3.5 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-xs font-semibold text-[#737373] hover:border-[#083865]/30 hover:text-[#083865] transition-all duration-300"
+                className="cursor-pointer flex-shrink-0 flex items-center gap-2 px-3.5 py-2.5 bg-[#f8fafc] border border-[#e5e7eb] rounded-xl text-xs font-semibold text-[#737373] hover:border-[#083865]/30 hover:text-[#083865] transition-all duration-300"
                 aria-label={`Sort ${sortAsc ? "Z to A" : "A to Z"}`}
                 title={`Currently: ${sortAsc ? "A → Z" : "Z → A"}`}
               >
@@ -275,7 +294,7 @@ export default function ProductsPage() {
                 </p>
                 <button
                   onClick={() => { setSearch(""); setCategory("all"); }}
-                  className="mt-6 px-6 py-2.5 bg-[#083865] text-white text-sm font-semibold rounded-xl hover:bg-[#1361A9] transition-all duration-300"
+                  className="cursor-pointer mt-6 px-6 py-2.5 bg-[#083865] text-white text-sm font-semibold rounded-xl hover:bg-[#1361A9] transition-all duration-300"
                 >
                   Clear filters
                 </button>

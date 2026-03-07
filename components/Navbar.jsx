@@ -5,22 +5,36 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
-import { Menu01Icon, Cancel01Icon } from "hugeicons-react";
+import { Menu01Icon, Cancel01Icon, ArrowDown01Icon } from "hugeicons-react";
+import { db } from "@/lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { CATEGORIES } from "@/lib/productsData";
 
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "About us", href: "/about" },
-  { name: "Products", href: "/products" },
+  { name: "Products", href: "/products", hasDropdown: true },
+  { name: "Blog", href: "/blog" },
   { name: "Contact us", href: "/contact" },
 ];
+
+// Static fallback (all except "all")
+const FALLBACK_CATEGORIES = CATEGORIES.filter((c) => c.id !== "all");
+
+// Module-level cache so we only fetch once per session
+let _categoryCache = null;
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
   const pathname = usePathname();
   const navRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const backdropRef = useRef(null);
+  const dropdownTimeout = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,6 +99,41 @@ export default function Navbar() {
     }
   }, []);
 
+  const openProducts = useCallback(() => {
+    clearTimeout(dropdownTimeout.current);
+    setIsProductsOpen(true);
+  }, []);
+
+  const closeProducts = useCallback(() => {
+    dropdownTimeout.current = setTimeout(() => setIsProductsOpen(false), 160);
+  }, []);
+
+  // Close dropdown on route change
+  useEffect(() => {
+    setIsProductsOpen(false);
+  }, [pathname]);
+
+  // Fetch categories from Firestore once (module-level cache)
+  useEffect(() => {
+    if (_categoryCache) {
+      setCategories(_categoryCache);
+      return;
+    }
+    getDocs(collection(db, "categories"))
+      .then((snap) => {
+        if (!snap.empty) {
+          const items = snap.docs
+            .map((d) => ({ id: d.data().id, label: d.data().label }))
+            .filter((c) => c.id && c.label);
+          if (items.length > 0) {
+            _categoryCache = items;
+            setCategories(items);
+          }
+        }
+      })
+      .catch(() => {/* keep fallback */});
+  }, []);
+
   return (
     <>
       <nav
@@ -120,6 +169,95 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-6 xl:gap-10">
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("#")[0]) && link.href.split("#")[0].length > 1);
+
+              if (link.hasDropdown) {
+                return (
+                  <div
+                    key={link.name}
+                    className="relative"
+                    onMouseEnter={openProducts}
+                    onMouseLeave={closeProducts}
+                  >
+                    {/* Trigger link */}
+                    <Link
+                      href={link.href}
+                      className={`relative text-sm xl:text-base leading-[1.21] font-medium transition-all duration-300 hover:text-[#083865] focus:outline-none focus:text-[#083865] group flex items-center gap-1.5 ${
+                        isActive ? "text-[#083865]" : "text-[#111827]/80"
+                      }`}
+                    >
+                      {link.name}
+                      <ArrowDown01Icon
+                        className={`w-3.5 h-3.5 transition-transform duration-300 ${isProductsOpen ? "rotate-180" : "rotate-0"}`}
+                      />
+                      <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-[#083865] to-[#1361A9] transition-all duration-300 rounded-full ${
+                        isActive ? "w-full" : "w-0 group-hover:w-full"
+                      }`} />
+                    </Link>
+
+                    {/* Dropdown panel — always mounted, toggled by opacity/pointer-events */}
+                    <div
+                      onMouseEnter={openProducts}
+                      onMouseLeave={closeProducts}
+                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[260px] transition-all duration-200 ease-out origin-top ${
+                        isProductsOpen
+                          ? "opacity-100 translate-y-0 pointer-events-auto scale-100"
+                          : "opacity-0 translate-y-3 pointer-events-none scale-[0.98]"
+                      }`}
+                      role="menu"
+                      aria-label="Product categories"
+                    >
+                      {/* Arrow pointer */}
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#e8ecf0] rotate-45 rounded-tl-sm shadow-none" />
+
+                      <div className="bg-white/98 backdrop-blur-xl rounded-2xl border border-[#e8ecf0] shadow-[0_20px_60px_-15px_rgba(8,56,101,0.18)] overflow-hidden">
+                        {/* Header */}
+                        <div className="px-5 pt-5 pb-3 border-b border-[#f0f4f8]">
+                          <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#083865]/50">
+                            Browse Categories
+                          </span>
+                        </div>
+
+                        {/* Text-only category list */}
+                        <div className="p-2.5" role="none">
+                          {categories.map((cat, i) => (
+                            <Link
+                              key={cat.id}
+                              href={`/products?category=${cat.id}`}
+                              role="menuitem"
+                              className="flex items-center justify-between px-4 py-2.5 rounded-xl transition-all duration-200 hover:bg-[#083865]/5 group/item focus:outline-none focus:ring-2 focus:ring-[#083865]/20"
+                            >
+                              <span className="text-sm font-medium text-[#374151] group-hover/item:text-[#083865] transition-colors duration-200">
+                                {cat.label}
+                              </span>
+                              <svg
+                                className="w-3.5 h-3.5 text-[#d1d5db] group-hover/item:text-[#083865] group-hover/item:translate-x-0.5 transition-all duration-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </Link>
+                          ))}
+                        </div>
+
+                        {/* View all footer */}
+                        <div className="px-4 pb-4 pt-1">
+                          <Link
+                            href="/products"
+                            role="menuitem"
+                            className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-gradient-to-r from-[#083865]/5 to-[#1361A9]/5 border border-[#083865]/10 text-[#083865] text-sm font-semibold transition-all duration-200 hover:from-[#083865]/10 hover:to-[#1361A9]/10 hover:border-[#083865]/20 group/all focus:outline-none focus:ring-2 focus:ring-[#083865]/20"
+                          >
+                            <span>View all products</span>
+                            <svg className="w-4 h-4 transition-transform duration-200 group-hover/all:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <Link
                   key={link.name}
@@ -152,7 +290,7 @@ export default function Navbar() {
           {/* Mobile: Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="lg:hidden p-2.5 text-[#111827] hover:text-[#083865] hover:bg-[#083865]/5 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
+            className="cursor-pointer lg:hidden p-2.5 text-[#111827] hover:text-[#083865] hover:bg-[#083865]/5 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
             aria-label="Open navigation menu"
             aria-expanded={isMobileMenuOpen}
           >
@@ -192,7 +330,7 @@ export default function Navbar() {
               />
               <button
                 onClick={closeMobileMenu}
-                className="p-2 text-[#111827] hover:text-[#083865] hover:bg-[#083865]/5 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
+                className="cursor-pointer p-2 text-[#111827] hover:text-[#083865] hover:bg-[#083865]/5 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#083865]/30"
                 aria-label="Close navigation menu"
               >
                 <Cancel01Icon size={24} />
@@ -201,9 +339,64 @@ export default function Navbar() {
 
             {/* Navigation Links */}
             <nav className="flex-1 overflow-y-auto py-6 px-6">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 {navLinks.map((link, index) => {
                   const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("#")[0]) && link.href.split("#")[0].length > 1);
+
+                  if (link.hasDropdown) {
+                    return (
+                      <div key={link.name}>
+                        {/* Products accordion trigger */}
+                        <button
+                          onClick={() => setIsMobileProductsOpen((v) => !v)}
+                          className={`cursor-pointer w-full flex items-center justify-between text-lg font-medium py-3.5 px-4 rounded-xl transition-all duration-300 ${
+                            isActive
+                              ? "text-[#083865] bg-[#083865]/5"
+                              : "text-[#111827] hover:text-[#083865] hover:bg-[#083865]/5"
+                          }`}
+                        >
+                          <span className="flex items-center gap-3">
+                            {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#083865]" />}
+                            {link.name}
+                          </span>
+                          <ArrowDown01Icon
+                            className={`w-4 h-4 transition-transform duration-300 ${isMobileProductsOpen ? "rotate-180" : "rotate-0"}`}
+                          />
+                        </button>
+
+                        {/* Sub-categories slide-down */}
+                        <div
+                          className={`overflow-hidden transition-all duration-300 ease-out ${
+                            isMobileProductsOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                          }`}
+                        >
+                          <div className="ml-4 pl-4 border-l-2 border-[#083865]/10 py-1.5 flex flex-col gap-0.5">
+                            {categories.map((cat) => (
+                              <Link
+                                key={cat.id}
+                                href={`/products?category=${cat.id}`}
+                                onClick={closeMobileMenu}
+                                className="flex items-center justify-between py-2.5 px-3 rounded-xl text-sm font-medium transition-all duration-200 text-[#4b5563] hover:text-[#083865] hover:bg-[#083865]/5 group/mitem"
+                              >
+                                <span>{cat.label}</span>
+                                <svg className="w-3.5 h-3.5 text-[#d1d5db] group-hover/mitem:text-[#083865] transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              </Link>
+                            ))}
+                            <Link
+                              href="/products"
+                              onClick={closeMobileMenu}
+                              className="flex items-center gap-2 py-2.5 px-3 rounded-xl text-sm font-semibold text-[#083865] hover:bg-[#083865]/5 transition-all duration-200 mt-1"
+                            >
+                              View all products →
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+
                   return (
                     <Link
                       key={link.name}

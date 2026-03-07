@@ -1,16 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import ProductCard from "../ProductCard";
 import { ArrowRight01Icon } from "hugeicons-react";
-import { SAMPLE_PRODUCTS } from "@/lib/productsData";
+import { getAllProducts } from "@/lib/products";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const products = SAMPLE_PRODUCTS.filter((p) => p.featured).slice(0, 4);
 
 export default function Products() {
   const sectionRef = useRef(null);
@@ -19,8 +17,33 @@ export default function Products() {
   const subtitleRef = useRef(null);
   const cardsRef = useRef(null);
   const ctaRef = useRef(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const animatedRef = useRef(false);
 
+  // Fetch featured products from Firestore (with fallback to static data)
   useEffect(() => {
+    getAllProducts()
+      .then((all) => {
+        const featured = all
+          .filter((p) => p.featured)
+          .sort((a, b) => {
+            const aTime = a.createdAt?.seconds ?? a.createdAt?.toMillis?.() ?? 0;
+            const bTime = b.createdAt?.seconds ?? b.createdAt?.toMillis?.() ?? 0;
+            return bTime - aTime; // newest first
+          })
+          .slice(0, 4);
+        setProducts(featured);
+      })
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Animate once products have loaded
+  useEffect(() => {
+    if (loading || products.length === 0 || animatedRef.current) return;
+    animatedRef.current = true;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -63,7 +86,7 @@ export default function Products() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [loading, products]);
 
   return (
     <section
@@ -108,18 +131,29 @@ export default function Products() {
           role="list"
           aria-label="Popular products"
         >
-          {products.map((product) => (
-            <div key={product.id} role="listitem">
-              <ProductCard
-                id={product.id}
-                slug={product.slug}
-                name={product.name}
-                image={product.mainImage}
-                rating={product.rating}
-                category={product.category}
-              />
-            </div>
-          ))}
+          {loading
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="animate-pulse rounded-xl overflow-hidden bg-white shadow">
+                  <div className="aspect-[4/3] bg-gray-200" />
+                  <div className="p-4 space-y-3">
+                    <div className="h-3 bg-gray-200 rounded w-1/3" />
+                    <div className="h-5 bg-gray-200 rounded w-2/3" />
+                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+                  </div>
+                </div>
+              ))
+            : products.map((product) => (
+                <div key={product.id} role="listitem">
+                  <ProductCard
+                    id={product.id}
+                    slug={product.slug}
+                    name={product.name}
+                    image={product.mainImage}
+                    rating={product.rating}
+                    category={product.category}
+                  />
+                </div>
+              ))}
         </div>
 
         {/* View All Button - Mobile */}

@@ -1,21 +1,54 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Deny read/write by default for security
+
+    // ── Helper: is the caller an authenticated user? ──
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // ── Helper: is the caller an admin? ──
+    function isAdminUser() {
+      return isAuth() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    // ── Products ──────────────────────────────────────
+    match /products/{productId} {
+      allow read: if true;                 // public catalogue
+      allow write: if isAuth();            // admin CRUD
+    }
+
+    // ── Categories ────────────────────────────────────
+    match /categories/{categoryId} {
+      allow read: if true;                 // needed by product filters
+      allow write: if isAuth();            // admin CRUD
+    }
+
+    // ── Blogs ─────────────────────────────────────────
+    match /blogs/{blogId} {
+      allow read: if true;                 // public blog
+      allow create, update: if isAuth();   // admin create/edit
+      allow delete: if isAuth();           // admin delete
+    }
+
+    // ── Inquiries (contact + product quotes) ──────────
+    match /inquiries/{inquiryId} {
+      allow create: if true;               // public form submissions
+      allow read, update, delete: if isAuth(); // admin management
+    }
+
+    // ── Users ─────────────────────────────────────────
+    match /users/{userId} {
+      // Each user can read/write their own doc (for login role fetch & auto-creation)
+      allow read, write: if isAuth() && request.auth.uid == userId;
+      // Admins can read & write any user doc (permissions page)
+      allow read, write: if isAdminUser();
+    }
+
+    // ── Deny everything else by default ───────────────
     match /{document=**} {
       allow read, write: if false;
-    }
-
-    // Public read access for product catalogue
-    match /products/{productId} {
-      allow read: if true;
-      allow write: if false;
-    }
-
-    // Allow public creates for inquiries (contact + product)
-    match /inquiries/{inquiryId} {
-      allow create: if true;
-      allow read, update, delete: if false;
     }
   }
 }

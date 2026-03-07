@@ -1,7 +1,7 @@
 import { Inter, Cambay } from "next/font/google";
 import { Toaster } from "sonner";
 import { CartProvider } from "@/lib/cartContext";
-import FloatingCart from "@/components/FloatingCart";
+import ConditionalFloatingCart from "@/components/ConditionalFloatingCart";
 import "./globals.css";
 
 const inter = Inter({
@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
       >
         <CartProvider>
           {children}
-          <FloatingCart />
+          <ConditionalFloatingCart />
         </CartProvider>
         <Toaster position="bottom-right" richColors duration={3000} />
       </body>

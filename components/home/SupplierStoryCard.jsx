@@ -40,7 +40,7 @@ export default function SupplierStoryCard({
           {/* Read More Button */}
           <div className="mt-8 flex items-center gap-4">
             <button 
-              className="group/btn inline-flex items-center gap-2 px-6 py-3 bg-[#083865] text-white rounded-xl text-sm font-semibold transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2"
+              className="cursor-pointer group/btn inline-flex items-center gap-2 px-6 py-3 bg-[#083865] text-white rounded-xl text-sm font-semibold transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/20 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2"
               aria-label={`Read more about ${title}`}
             >
               <span>Read Full Story</span>

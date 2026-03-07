@@ -248,7 +248,7 @@ export default function ProductDetailPage() {
                         key={idx}
                         role="listitem"
                         onClick={() => setActiveImage(idx)}
-                        className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                        className={`cursor-pointer relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-300 ${
                           activeImage === idx
                             ? "border-[#083865] shadow-md shadow-[#083865]/15 scale-[1.02]"
                             : "border-transparent hover:border-[#083865]/25 opacity-75 hover:opacity-100"
@@ -287,30 +287,27 @@ export default function ProductDetailPage() {
                   </p>
                 </div>
 
-                {/* Divider */}
-                <div className="border-t border-[#e5e7eb] anim-in" aria-hidden="true" />
-
-                {/* Origin / Quality badges */}
-                <div className="grid grid-cols-2 gap-2 anim-in" aria-label="Product attributes">
-                  {[
-                    "Premium Grade",
-                    "Export Quality",
-                    "Sri Lanka Origin",
-                    "Natural & Pure",
-                  ].map((tag) => (
-                    <div
-                      key={tag}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#f4f6f9] border border-[#e5e7eb]"
-                    >
-                      <span className="w-4 h-4 rounded-full bg-[#083865]/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-                        <svg className="w-2.5 h-2.5 text-[#083865]" viewBox="0 0 12 12" fill="currentColor">
-                          <path d="M10 3L5 8.5 2 5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                        </svg>
-                      </span>
-                      <span className="text-[#374151] text-[11px] font-semibold uppercase tracking-wide">{tag}</span>
+                {/* Divider + Origin / Quality badges (only if tags exist) */}
+                {(product.tags?.length > 0) && (
+                  <>
+                    <div className="border-t border-[#e5e7eb] anim-in" aria-hidden="true" />
+                    <div className="grid grid-cols-2 gap-2 anim-in" aria-label="Product attributes">
+                      {product.tags.map((tag) => (
+                        <div
+                          key={tag}
+                          className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#f4f6f9] border border-[#e5e7eb]"
+                        >
+                          <span className="w-4 h-4 rounded-full bg-[#083865]/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                            <svg className="w-2.5 h-2.5 text-[#083865]" viewBox="0 0 12 12" fill="currentColor">
+                              <path d="M10 3L5 8.5 2 5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                            </svg>
+                          </span>
+                          <span className="text-[#374151] text-[11px] font-semibold uppercase tracking-wide">{tag}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </>
+                )}
 
                 {/* Divider */}
                 <div className="border-t border-[#e5e7eb] anim-in" aria-hidden="true" />
@@ -319,7 +316,7 @@ export default function ProductDetailPage() {
                 <div className="flex flex-col sm:flex-row gap-3 anim-in">
                   <button
                     onClick={handleAddToCart}
-                    className="flex-1 py-4 bg-[#083865] text-white font-semibold text-sm uppercase tracking-wide rounded-2xl transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/25 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 flex items-center justify-center gap-2"
+                    className="cursor-pointer flex-1 py-4 bg-[#083865] text-white font-semibold text-sm uppercase tracking-wide rounded-2xl transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/25 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 flex items-center justify-center gap-2"
                     aria-label={`Add ${product.name} to cart`}
                   >
                     <ShoppingCart01Icon className="w-4.5 h-4.5" aria-hidden="true" />
@@ -328,7 +325,7 @@ export default function ProductDetailPage() {
 
                   <button
                     onClick={() => setInquiryOpen((v) => !v)}
-                    className={`flex-1 py-4 border-2 font-semibold text-sm uppercase tracking-wide rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 flex items-center justify-center gap-2 ${
+                    className={`cursor-pointer flex-1 py-4 border-2 font-semibold text-sm uppercase tracking-wide rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 flex items-center justify-center gap-2 ${
                       inquiryOpen
                         ? "border-[#083865] bg-[#083865]/5 text-[#083865]"
                         : "border-[#083865]/20 text-[#083865] hover:border-[#083865]/50 hover:bg-[#083865]/4"
@@ -407,7 +404,7 @@ export default function ProductDetailPage() {
                       <button
                         type="submit"
                         disabled={inquiryStatus === "sending"}
-                        className="w-full py-3.5 bg-[#083865] text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/20 disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#083865]/30 flex items-center justify-center gap-2"
+                        className="cursor-pointer w-full py-3.5 bg-[#083865] text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:bg-[#1361A9] hover:shadow-lg hover:shadow-[#083865]/20 disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#083865]/30 flex items-center justify-center gap-2"
                       >
                         {inquiryStatus === "sending" ? (
                           <>

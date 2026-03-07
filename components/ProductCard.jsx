@@ -68,7 +68,7 @@ export default function ProductCard({
         {/* Add to Cart Button */}
         <button
           onClick={handleAddToCart}
-          className="w-full py-3 bg-gradient-to-r from-[#f0f2f5] to-[#e8eaed] rounded-xl text-[#083865] text-xs font-semibold uppercase tracking-wide transition-all duration-500 hover:from-[#083865] hover:to-[#1361A9] hover:text-white hover:shadow-lg hover:shadow-[#083865]/20 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 flex items-center justify-center gap-2 group/btn"
+          className="cursor-pointer w-full py-3 bg-gradient-to-r from-[#f0f2f5] to-[#e8eaed] rounded-xl text-[#083865] text-xs font-semibold uppercase tracking-wide transition-all duration-500 hover:from-[#083865] hover:to-[#1361A9] hover:text-white hover:shadow-lg hover:shadow-[#083865]/20 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 flex items-center justify-center gap-2 group/btn"
           aria-label={`Add ${name} to cart`}
         >
           <ShoppingCart01Icon className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:scale-110" />

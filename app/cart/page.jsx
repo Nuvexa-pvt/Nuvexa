@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { toast } from "sonner";
@@ -59,7 +60,7 @@ function CartItem({ item, onUpdateQty, onRemove }) {
               onRemove(item.id);
               toast.success(`${item.name} removed from cart`);
             }}
-            className="flex-shrink-0 p-1.5 text-[#9ca3af] hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300/50"
+            className="cursor-pointer flex-shrink-0 p-1.5 text-[#9ca3af] hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300/50"
             aria-label={`Remove ${item.name} from cart`}
           >
             <Delete02Icon className="w-4 h-4" />
@@ -72,7 +73,7 @@ function CartItem({ item, onUpdateQty, onRemove }) {
             <button
               onClick={() => onUpdateQty(item.id, item.quantity - 1)}
               disabled={item.quantity <= 1}
-              className="w-8 h-8 flex items-center justify-center rounded-l-lg border border-[#e5e7eb] text-[#737373] hover:text-[#083865] hover:border-[#083865]/30 hover:bg-[#083865]/5 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#083865]/20"
+              className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-l-lg border border-[#e5e7eb] text-[#737373] hover:text-[#083865] hover:border-[#083865]/30 hover:bg-[#083865]/5 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#083865]/20"
               aria-label="Decrease quantity"
             >
               <MinusSignIcon className="w-3.5 h-3.5" />
@@ -82,7 +83,7 @@ function CartItem({ item, onUpdateQty, onRemove }) {
             </span>
             <button
               onClick={() => onUpdateQty(item.id, item.quantity + 1)}
-              className="w-8 h-8 flex items-center justify-center rounded-r-lg border border-[#e5e7eb] text-[#737373] hover:text-[#083865] hover:border-[#083865]/30 hover:bg-[#083865]/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#083865]/20"
+              className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-r-lg border border-[#e5e7eb] text-[#737373] hover:text-[#083865] hover:border-[#083865]/30 hover:bg-[#083865]/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#083865]/20"
               aria-label="Increase quantity"
             >
               <PlusSignIcon className="w-3.5 h-3.5" />
@@ -100,7 +101,7 @@ function CartItem({ item, onUpdateQty, onRemove }) {
 
 export default function CartPage() {
   const { cartItems, cartCount, removeFromCart, updateQuantity, clearCart, isHydrated } = useCart();
-
+  const router = useRouter();
   const heroRef = useRef(null);
 
   useEffect(() => {
@@ -111,9 +112,7 @@ export default function CartPage() {
   }, [isHydrated]);
 
   const handleBulkInquiry = () => {
-    const names = cartItems.map((i) => `${i.quantity}x ${i.name}`).join(", ");
-    const message = encodeURIComponent(`Hi, I'd like to inquire about bulk pricing for the following products: ${names}. Please provide more details.`);
-    window.location.href = `/contact?message=${message}`;
+    router.push("/quote");
   };
 
   return (
@@ -135,7 +134,7 @@ export default function CartPage() {
               {isHydrated
                 ? cartCount === 0
                   ? "Your cart is empty"
-                  : `${cartCount} item${cartCount !== 1 ? "s" : ""} ready to inquire`
+                  : `${cartCount} item${cartCount !== 1 ? "s" : ""} ready for quoting`
                 : "Loading your cart…"}
             </p>
           </div>
@@ -192,7 +191,7 @@ export default function CartPage() {
                         clearCart();
                         toast.success("Cart cleared");
                       }}
-                      className="text-xs text-[#9ca3af] hover:text-red-500 font-medium transition-colors duration-200 underline decoration-dotted underline-offset-2 focus:outline-none"
+                      className="cursor-pointer text-xs text-[#9ca3af] hover:text-red-500 font-medium transition-colors duration-200 underline decoration-dotted underline-offset-2 focus:outline-none"
                       aria-label="Remove all items from cart"
                     >
                       Clear all
@@ -238,17 +237,17 @@ export default function CartPage() {
                       {/* Inquiry info */}
                       <div className="bg-[#083865]/5 border border-[#083865]/10 rounded-xl p-4">
                         <p className="text-[#374151] text-xs leading-relaxed">
-                          <span className="font-semibold text-[#083865]">Inquiry-based ordering.</span> We&apos;ll provide custom pricing for your selected products based on quantity and requirements.
+                          <span className="font-semibold text-[#083865]">Quote-based ordering.</span> Submit a request and we&apos;ll prepare a tailored price proposal for your products.
                         </p>
                       </div>
 
                       {/* CTA */}
                       <button
                         onClick={handleBulkInquiry}
-                        className="w-full py-4 bg-gradient-to-r from-[#083865] to-[#1361A9] text-white font-semibold text-sm uppercase tracking-wide rounded-2xl transition-all duration-500 hover:shadow-xl hover:shadow-[#083865]/25 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 flex items-center justify-center gap-2.5"
-                        aria-label="Send bulk inquiry for all cart items"
+                        className="cursor-pointer w-full py-4 bg-gradient-to-r from-[#083865] to-[#1361A9] text-white font-semibold text-sm uppercase tracking-wide rounded-2xl transition-all duration-500 hover:shadow-xl hover:shadow-[#083865]/25 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#083865]/30 focus:ring-offset-2 flex items-center justify-center gap-2.5"
+                        aria-label="Request a quote for all cart items"
                       >
-                        Send Bulk Inquiry
+                        Request a Quote
                         <ArrowRight01Icon className="w-4 h-4" aria-hidden="true" />
                       </button>
 
