@@ -41,8 +41,8 @@ export async function POST(request) {
 
     const docRef = await addDoc(collection(db, "inquiries"), inquiryData);
 
-    // Fire-and-forget notification to all registered emails
-    sendNotificationEmails("inquiry", {
+    // Notify all registered emails — awaited so Vercel doesn't kill it before it sends
+    await sendNotificationEmails("inquiry", {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: phone?.trim() || "",
