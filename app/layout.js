@@ -69,10 +69,10 @@ export const metadata = {
     siteName: "NUVEXA International",
     title: "NUVEXA International | Premium Sri Lankan Exports — Tea, Spices, Coconut & Herbs",
     description:
-      "Sri Lanka's trusted B2B export partner. Premium Ceylon tea, authentic spices, virgin coconut oil, aloe vera products, and certified herbal extracts for global buyers.",
+      "Sri Lanka's trusted export partner. Premium Ceylon tea, authentic spices, virgin coconut oil, aloe vera products, and certified herbal extracts for global buyers.",
     images: [
       {
-        url: "/webmeta.png",
+        url: `${BASE_URL}/webmeta.png`,
         width: 1200,
         height: 630,
         alt: "NUVEXA International — Premium Sri Lankan Natural Product Exports",
@@ -85,8 +85,8 @@ export const metadata = {
     card: "summary_large_image",
     title: "NUVEXA International | Premium Sri Lankan Exports",
     description:
-      "Sri Lanka's trusted B2B export partner. Premium Ceylon tea, spices, coconut oil, aloe vera & herbal products for global buyers.",
-    images: ["/webmeta.png"],
+      "Sri Lanka's trusted export partner. Premium Ceylon tea, spices, coconut oil, aloe vera & herbal products for global buyers.",
+    images: [`${BASE_URL}/webmeta.png`],
     creator: "@nuvexaintl",
   },
 
@@ -99,7 +99,7 @@ export const metadata = {
     // google: "your-google-verification-token",
   },
 
-  category: "B2B Export, Natural Products, Food & Beverage",
+  category: "Export, Natural Products, Food & Beverage",
 };
 
 export default function RootLayout({ children }) {

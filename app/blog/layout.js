@@ -15,12 +15,12 @@ export const metadata = {
     description:
       "Expert articles on Ceylon tea, spices, coconut products, aloe vera, herbal extracts, and the Sri Lanka export trade.",
     url: `${BASE_URL}/blog`,
-    images: [{ url: "/webmeta.png", width: 1200, height: 630, alt: "NUVEXA International Blog" }],
+    images: [{ url: `${BASE_URL}/webmeta.png`, width: 1200, height: 630, alt: "NUVEXA International Blog" }],
   },
   twitter: {
     title: "Blog | NUVEXA International",
     description: "Insights on Ceylon tea, spices, coconut products, and Sri Lanka's export trade.",
-    images: ["/webmeta.png"],
+    images: [`${BASE_URL}/webmeta.png`],
   },
 };
 

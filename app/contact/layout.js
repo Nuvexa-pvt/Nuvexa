@@ -17,13 +17,13 @@ export const metadata = {
     description:
       "Send a trade inquiry to Nuvexa International. We supply premium Ceylon tea, spices, coconut products, aloe vera, and herbal extracts to global buyers.",
     url: `${BASE_URL}/contact`,
-    images: [{ url: "/webmeta.png", width: 1200, height: 630, alt: "Contact NUVEXA International" }],
+    images: [{ url: `${BASE_URL}/webmeta.png`, width: 1200, height: 630, alt: "Contact NUVEXA International" }],
   },
   twitter: {
     title: "Contact Nuvexa International | B2B Export Inquiries",
     description:
       "Reach out for wholesale inquiries on Ceylon tea, spices, coconut products, and herbal extracts from Sri Lanka.",
-    images: ["/webmeta.png"],
+    images: [`${BASE_URL}/webmeta.png`],
   },
 };
 

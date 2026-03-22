@@ -15,13 +15,13 @@ export const metadata = {
     description:
       "Nuvexa International bridges certified Sri Lankan producers with international buyers. Discover our story, values, and commitment to quality exports.",
     url: `${BASE_URL}/about`,
-    images: [{ url: "/webmeta.png", width: 1200, height: 630, alt: "About NUVEXA International" }],
+    images: [{ url: `${BASE_URL}/webmeta.png`, width: 1200, height: 630, alt: "About NUVEXA International" }],
   },
   twitter: {
     title: "About Nuvexa International | Sri Lanka's Trusted Export Partner",
     description:
       "Nuvexa International bridges Sri Lankan producers with global buyers. Quality-assured Ceylon tea, spices, coconut products & herbal extracts.",
-    images: ["/webmeta.png"],
+    images: [`${BASE_URL}/webmeta.png`],
   },
 };
 
