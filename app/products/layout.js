@@ -19,13 +19,13 @@ export const metadata = {
     description:
       "Premium export-ready natural products from Sri Lanka. Ceylon tea, cinnamon, coconut oil, aloe vera, and herbal extracts for global wholesale buyers.",
     url: `${BASE_URL}/products`,
-    images: [{ url: "/webmeta.png", width: 1200, height: 630, alt: "NUVEXA International Product Range" }],
+    images: [{ url: `${BASE_URL}/webmeta.png`, width: 1200, height: 630, alt: "NUVEXA International Product Range" }],
   },
   twitter: {
     title: "Products | NUVEXA International — Ceylon Tea, Spices & More",
     description:
       "Wholesale Ceylon tea, spices, coconut oil, aloe vera & herbal products from Sri Lanka. B2B export inquiries welcome.",
-    images: ["/webmeta.png"],
+    images: [`${BASE_URL}/webmeta.png`],
   },
 };
 
