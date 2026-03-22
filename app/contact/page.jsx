@@ -37,7 +37,7 @@ const contactDetails = [
       </svg>
     ),
     lines: [
-      { text: "peshala@sunwayhc.com", href: "mailto:peshala@sunwayhc.com" },
+      { text: "info@nuvexainternational.com", href: "mailto:info@nuvexainternational.com" },
     ],
   },
   {
@@ -405,9 +405,9 @@ export default function ContactPage() {
                     Whether you're a global buyer seeking premium Sri Lankan products or a local producer looking to expand internationally — let's start the conversation.
                   </p>
                   <a
-                    href="mailto:peshala@sunwayhc.com"
+                    href="mailto:info@nuvexainternational.com"
                     className="flex items-center gap-3 group/link"
-                    aria-label="Email peshala@sunwayhc.com"
+                    aria-label="Email info@nuvexainternational.com"
                   >
                     <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 group-hover/link:bg-white/20 transition-colors duration-200">
                       <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -415,7 +415,7 @@ export default function ContactPage() {
                       </svg>
                     </div>
                     <span className="text-white/80 text-sm group-hover/link:text-white transition-colors duration-200">
-                      peshala@sunwayhc.com
+                      info@nuvexainternational.com
                     </span>
                   </a>
                 </div>

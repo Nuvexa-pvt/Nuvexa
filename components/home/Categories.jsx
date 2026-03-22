@@ -28,11 +28,11 @@ const categories = [
   },
   {
     id: 3,
-    name: "COCONUT PRODUCTS",
+    name: "ALOE VERA PRODUCTS",
     subtitle: "Pure & Natural",
-    image: "/coconut pic.png",
+    image: "/aloe-vera.png",
     singleLine: true,
-    href: "/products?category=coconut-products",
+    href: "/products?category=aloe-vera",
   },
   {
     id: 4,

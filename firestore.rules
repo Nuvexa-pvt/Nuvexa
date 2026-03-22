@@ -38,6 +38,12 @@ service cloud.firestore {
       allow read, update, delete: if isAuth(); // admin management
     }
 
+    // ── Notification emails (admin-managed recipient list) ────
+    match /notification-emails/{emailId} {
+      allow read: if true;               // API routes need to read recipients
+      allow create, update, delete: if isAdminUser();
+    }
+
     // ── Users ─────────────────────────────────────────
     match /users/{userId} {
       // Each user can read/write their own doc (for login role fetch & auto-creation)

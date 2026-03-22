@@ -18,7 +18,7 @@ export default function Home() {
       <Categories />
       <VisionMission />
       <Qualities />
-      <SupplierStories />
+      {/* <SupplierStories /> */}
       <Footer />
     </main>
   );

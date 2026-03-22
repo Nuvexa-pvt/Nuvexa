@@ -1,6 +1,7 @@
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { NextResponse } from "next/server";
+import { sendNotificationEmails } from "@/lib/notifications";
 
 // Saves a contact inquiry to Firestore and returns success/error
 export async function POST(request) {
@@ -27,7 +28,7 @@ export async function POST(request) {
     }
 
     // Save inquiry to Firestore
-    const docRef = await addDoc(collection(db, "inquiries"), {
+    const inquiryData = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: phone?.trim() || "",
@@ -36,6 +37,18 @@ export async function POST(request) {
       message: message.trim(),
       status: "new",           // for backend dashboard filtering
       createdAt: serverTimestamp(),
+    };
+
+    const docRef = await addDoc(collection(db, "inquiries"), inquiryData);
+
+    // Fire-and-forget notification to all registered emails
+    sendNotificationEmails("inquiry", {
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone?.trim() || "",
+      company: company?.trim() || "",
+      country: country?.trim() || "",
+      message: message.trim(),
     });
 
     return NextResponse.json({

@@ -1,6 +1,7 @@
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { NextResponse } from "next/server";
+import { sendNotificationEmails } from "@/lib/notifications";
 
 // Saves a product inquiry (single product or bulk cart quote) to Firestore
 export async function POST(request) {
@@ -69,6 +70,19 @@ export async function POST(request) {
     }
 
     const docRef = await addDoc(collection(db, "inquiries"), docData);
+
+    // Fire-and-forget notification to all registered emails
+    sendNotificationEmails("quote", {
+      name: docData.name,
+      email: docData.email,
+      message: docData.message,
+      phone: docData.phone || "",
+      company: docData.company || "",
+      destination: docData.destination || "",
+      productName: docData.productName || "",
+      isBulk: docData.isBulk || false,
+      products: docData.products || [],
+    });
 
     return NextResponse.json({
       success: true,

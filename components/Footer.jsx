@@ -155,11 +155,11 @@ export default function Footer() {
             </h3>
             <div className="flex flex-col items-center sm:items-start gap-3 sm:gap-4">
               <a 
-                href="mailto:peshala@sunwayhc.com" 
+                href="mailto:info@nuvexainternational.com" 
                 className="flex items-center gap-2 sm:gap-3 text-white/60 text-sm sm:text-base transition-colors duration-300 hover:text-white group focus:outline-none focus:text-white"
               >
                 <Mail01Icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 text-[#1361A9] group-hover:text-white transition-colors" />
-                <span>peshala@sunwayhc.com</span>
+                <span>info@nuvexainternational.com</span>
               </a>
               <a 
                 href="tel:+94773666365" 

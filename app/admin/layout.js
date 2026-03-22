@@ -14,6 +14,7 @@ import {
   PenSquare,
   Mail,
   MessageSquareQuote,
+  Bell,
   ShieldCheck,
   LogOut,
   Menu,
@@ -27,8 +28,9 @@ const ALL_SIDEBAR_LINKS = [
   { label: "Products",    href: "/admin/products",     icon: Package,            page: "products"    },
   { label: "Blog Posts",  href: "/admin/blog",         icon: PenSquare,          page: "blogs"       },
   { label: "Inquiries",   href: "/admin/inquiries",    icon: Mail,               page: "inquiries"   },
-  { label: "Quotes",      href: "/admin/quotes",       icon: MessageSquareQuote, page: "quotes"      },
-  { label: "Permissions", href: "/admin/permissions",  icon: ShieldCheck,        page: "permissions" },
+  { label: "Quotes",        href: "/admin/quotes",         icon: MessageSquareQuote, page: "quotes"        },
+  { label: "Notifications", href: "/admin/notifications",  icon: Bell,               page: "notifications" },
+  { label: "Permissions",   href: "/admin/permissions",    icon: ShieldCheck,        page: "permissions"   },
 ];
 
 // Which page key does a pathname map to?
@@ -37,8 +39,9 @@ function getPageKey(pathname) {
   if (pathname.startsWith("/admin/products"))    return "products";
   if (pathname.startsWith("/admin/blog"))        return "blogs";
   if (pathname.startsWith("/admin/inquiries"))   return "inquiries";
-  if (pathname.startsWith("/admin/quotes"))      return "quotes";
-  if (pathname.startsWith("/admin/permissions")) return "permissions";
+  if (pathname.startsWith("/admin/quotes"))        return "quotes";
+  if (pathname.startsWith("/admin/notifications")) return "notifications";
+  if (pathname.startsWith("/admin/permissions"))   return "permissions";
   return null;
 }
 
